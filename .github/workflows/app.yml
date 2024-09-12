@@ -21,9 +21,25 @@ jobs:
         with:
           python-version: '3.x'
           
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Test MySQL connection
+        run: |
+          python -c "import mysql.connector; mysql.connector.connect(
+            host='${{ secrets.DB_HOST }}',
+            user='${{ secrets.DB_USER }}',
+            password='${{ secrets.DB_PASSWORD }}',
+            database='${{ secrets.DB_NAME }}')"
+
+          
       - name: Run unit tests  # Agregar este paso para ejecutar las pruebas unitarias
         run: |
           python -m unittest discover -s tests -p "*.py"
+          
+      
+
           
       - name: Deploy to EC2 Instance
         env:
