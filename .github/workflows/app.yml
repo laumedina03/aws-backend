@@ -25,11 +25,6 @@ jobs:
         run: |
           pip install -r requirements.txt
 
-          
-      - name: Run unit tests  # Agregar este paso para ejecutar las pruebas unitarias
-        run: |
-          python -m unittest discover -s tests -p "*.py"
-          
       - name: Test MySQL connection
         run: |
           python -c "import mysql.connector; mysql.connector.connect(
@@ -37,6 +32,13 @@ jobs:
             user='${{ secrets.DB_USER }}',
             password='${{ secrets.DB_PASSWORD }}',
             database='${{ secrets.DB_NAME }}')"
+
+          
+      - name: Run unit tests  # Agregar este paso para ejecutar las pruebas unitarias
+        run: |
+          python -m unittest discover -s tests -p "*.py"
+          
+      
 
           
       - name: Deploy to EC2 Instance
