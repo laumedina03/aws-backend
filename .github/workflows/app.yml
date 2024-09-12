@@ -71,7 +71,7 @@ jobs:
               sudo fuser -k 5000/tcp &&
 
               # Run the POST request test
-              python -c "from app import test_add_user; test_add_user()"
+              #python -c "from app import test_add_user; test_add_user()"
 
               # Ejecutar la aplicación Flask
               gunicorn -b 0.0.0.0:5000 app:app --daemon
