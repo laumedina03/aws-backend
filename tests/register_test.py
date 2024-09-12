@@ -11,14 +11,14 @@ class TestUserRegistration(unittest.TestCase):
     def test_register_user(self):
         # Datos de prueba
         new_user = {
-            'nombres': 'Juan',
-            'apellidos': 'Perez',
-            'fecha_nacimiento': '1990-01-01',
+            'first_name': 'Juan',
+            'last_name': 'Perez',
+            'birth_date': '1990-01-01',
             'password': 'segura123'
         }
-        response = self.app.post('/register', json=new_user)
+        response = self.app.post('/add-user', json=new_user)
         self.assertEqual(response.status_code, 201)
-        self.assertIn('Usuario registrado exitosamente', str(response.data))
+        self.assertIn('User added successfully!', str(response.data))
 
 if __name__ == '__main__':
     unittest.main()
