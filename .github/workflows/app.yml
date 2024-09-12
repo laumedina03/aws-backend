@@ -68,7 +68,7 @@ jobs:
               #pip install -r requirements.txt &&
 
               # Detener cualquier proceso que esté usando el puerto 5000
-              sudo fuser -k 5000/tcp || exit 6
+              #sudo fuser -k 5000/tcp || exit 6
 
               # Run the POST request test
               #python -c "from app import test_add_user; test_add_user()"
