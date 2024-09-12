@@ -8,7 +8,7 @@ CORS(app, resources={r"/*": {"origins": "http://ec2-34-225-25-41.compute-1.amazo
 # Database connection setup
 def get_db_connection():
     return mysql.connector.connect(
-        host='172.31.27.224',  # Replace with your MySQL server's private IP
+        host='ec2-100-28-15-106.compute-1.amazonaws.com',  # Replace with your MySQL server's private IP
         user='camilin',            # Replace with your MySQL username
         password='1234',    # Replace with your MySQL password
         database='mysql_parcial'      # Replace with your database name
