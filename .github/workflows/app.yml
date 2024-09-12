@@ -20,7 +20,11 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-
+          
+      - name: Run unit tests  # Agregar este paso para ejecutar las pruebas unitarias
+        run: |
+          python -m unittest discover -s aws-backend
+          
       - name: Deploy to EC2 Instance
         env:
           EC2_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
