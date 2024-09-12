@@ -4,7 +4,7 @@ from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://ec2-34-225-25-41.compute-1.amazonaws.com:3000"}})  # Allow all origins for testing
+CORS(app, resources={r"/*": {"origins": "http://ec2-3-218-165-24.compute-1.amazonaws.com:3000"}})  # Allow all origins for testing
 # Database connection setup
 def get_db_connection():
     return mysql.connector.connect(
