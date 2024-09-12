@@ -21,8 +21,7 @@ jobs:
         with:
           python-version: '3.x'
           
-      - name: Run unit tests
-        working-directory: aws-backend
+      - name: Run unit tests  # Agregar este paso para ejecutar las pruebas unitarias
         run: |
           python -m unittest discover -s tests
           
