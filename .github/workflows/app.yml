@@ -23,7 +23,7 @@ jobs:
           
       - name: Run unit tests  # Agregar este paso para ejecutar las pruebas unitarias
         run: |
-          python -m unittest discover -s aws-backend
+          python -m unittest discover -s aws-backend/tests
           
       - name: Deploy to EC2 Instance
         env:
