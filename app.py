@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import mysql.connector
 from flask_cors import CORS
+import requests
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://ec2-35-174-170-11.compute-1.amazonaws.com:3000"}})  # Allow all origins for testing
