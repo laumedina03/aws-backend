@@ -30,6 +30,15 @@ jobs:
         run: |
           python -m unittest discover -s tests -p "*.py"
           
+      - name: Test MySQL connection
+        run: |
+          python -c "import mysql.connector; mysql.connector.connect(
+            host='${{ secrets.DB_HOST }}',
+            user='${{ secrets.DB_USER }}',
+            password='${{ secrets.DB_PASSWORD }}',
+            database='${{ secrets.DB_NAME }}')"
+
+          
       - name: Deploy to EC2 Instance
         env:
           EC2_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
