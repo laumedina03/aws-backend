@@ -46,6 +46,26 @@ def add_user():
     conn.close()
 
     return jsonify({'message': 'User added successfully!'}), 201
+
+# Function to test POST request for adding user
+def test_add_user():
+    url = 'http://localhost:5000/add-user'
+    payload = {
+        "first_name": "John",
+        "last_name": "Doe",
+        "birth_date": "1990-01-01",
+        "password": "testpassword"
+    }
+    headers = {'Content-Type': 'application/json'}
+    response = requests.post(url, json=payload, headers=headers)
+
+    if response.status_code == 201:
+        print("Test passed: User added successfully")
+    else:
+        print(f"Test failed: Status code {response.status_code}")
+
+
+
 if __name__ == '__main__':
     app.run(port=5000, host='0.0.0.0', debug=True)
 
