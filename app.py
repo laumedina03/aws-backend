@@ -49,10 +49,10 @@ def add_user():
 
 # Function to test POST request for adding user
 def test_add_user():
-    url = 'http://localhost:5000/add-user'
+    url = 'http://ec2-54-158-25-160.compute-1.amazonaws.com/:5000/add-user'
     payload = {
-        "first_name": "John",
-        "last_name": "Doe",
+        "first_name": "Test",
+        "last_name": "Name",
         "birth_date": "1990-01-01",
         "password": "testpassword"
     }
