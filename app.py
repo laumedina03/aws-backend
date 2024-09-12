@@ -4,7 +4,7 @@ from flask_cors import CORS
 import requests
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://ec2-35-174-170-11.compute-1.amazonaws.com:3000"}})  # Allow all origins for testing
+CORS(app, resources={r"/*": {"origins": "ec2-44-211-78-224.compute-1.amazonaws.com:3000"}})  # Allow all origins for testing
 # Database connection setup
 def get_db_connection():
     return mysql.connector.connect(
@@ -49,7 +49,7 @@ def add_user():
     return jsonify({'message': 'User added successfully!'}), 201
 
 # Function to test POST request for adding user
-def test_add_user():
+"""def test_add_user():
     url = 'http://ec2-54-158-25-160.compute-1.amazonaws.com:5000/add-user'
     payload = {
         "first_name": "Test",
@@ -63,7 +63,7 @@ def test_add_user():
     if response.status_code == 201:
         print("Test passed: User added successfully")
     else:
-        print(f"Test failed: Status code {response.status_code}")
+        print(f"Test failed: Status code {response.status_code}")"""
 
 
 
