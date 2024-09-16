@@ -1,6 +1,6 @@
 import unittest
 import json
-from app import app, get_db_connection  # Importa la aplicación Flask
+from app import app, get_db_connection
 
 class RegisterUserTestCase(unittest.TestCase):
 
@@ -9,15 +9,15 @@ class RegisterUserTestCase(unittest.TestCase):
         app.config['TESTING'] = True
         self.app = app.test_client()
 
-        # Configura para usar la base de datos SQLite en memoria
-        self.conn = get_db_connection()
+        # Conecta a la base de datos de prueba
+        self.conn = get_db_connection(test_db=True)
         self.create_tables()
 
     def create_tables(self):
         """Crea las tablas necesarias para las pruebas."""
         cursor = self.conn.cursor()
         cursor.execute('''
-            CREATE TABLE user (
+            CREATE TABLE IF NOT EXISTS user (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
@@ -43,11 +43,17 @@ class RegisterUserTestCase(unittest.TestCase):
         cursor = self.conn.cursor()
         cursor.execute('SELECT * FROM user WHERE first_name=?', ('John',))
         user = cursor.fetchone()
+ # Agrega una impresión para ver el resultado de la consulta
+        print("User retrieved from database:", user)
         self.assertIsNotNone(user)
-        self.assertEqual(user['last_name'], 'Doe')
+        self.assertEqual(user['last_name'], 'Doe')  # Verifica el apellido
 
     def tearDown(self):
         """Limpia después de cada prueba."""
+        # Elimina la tabla de la base de datos de prueba
+        cursor = self.conn.cursor()
+        cursor.execute('DROP TABLE IF EXISTS user')
+        self.conn.commit()
         self.conn.close()
 
 if __name__ == '__main__':
