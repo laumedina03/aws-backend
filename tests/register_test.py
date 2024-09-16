@@ -1,24 +1,54 @@
 import unittest
-from app import app  # Importa la aplicación Flask
+import json
+from app import app, get_db_connection  # Importa la aplicación Flask
 
-class TestUserRegistration(unittest.TestCase):
+class RegisterUserTestCase(unittest.TestCase):
 
     def setUp(self):
-        # Configurar un cliente de prueba para interactuar con la app Flask
+        """Configuración inicial, ejecutada antes de cada prueba."""
+        app.config['TESTING'] = True
         self.app = app.test_client()
-        self.app.testing = True
+
+        # Configura para usar la base de datos SQLite en memoria
+        self.conn = get_db_connection()
+        self.create_tables()
+
+    def create_tables(self):
+        """Crea las tablas necesarias para las pruebas."""
+        cursor = self.conn.cursor()
+        cursor.execute('''
+            CREATE TABLE user (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                first_name TEXT NOT NULL,
+                last_name TEXT NOT NULL,
+                birth_date TEXT NOT NULL,
+                password TEXT NOT NULL
+            )
+        ''')
+        self.conn.commit()
 
     def test_register_user(self):
-        # Datos de prueba
-        new_user = {
-            'first_name': 'Juan',
-            'last_name': 'Perez',
-            'birth_date': '1990-01-01',
-            'password': 'segura123'
-        }
-        response = self.app.post('/add-user', json=new_user)
+        """Prueba para registrar un usuario."""
+        response = self.app.post('/add-user', 
+                                 data=json.dumps({
+                                     "first_name": "John",
+                                     "last_name": "Doe",
+                                     "birth_date": "1990-01-01",
+                                     "password": "password123"
+                                 }),
+                                 content_type='application/json')
         self.assertEqual(response.status_code, 201)
-        self.assertIn('User added successfully!', str(response.data))
+
+        # Verifica que el usuario fue insertado en la base de datos
+        cursor = self.conn.cursor()
+        cursor.execute('SELECT * FROM user WHERE first_name=?', ('John',))
+        user = cursor.fetchone()
+        self.assertIsNotNone(user)
+        self.assertEqual(user['last_name'], 'Doe')
+
+    def tearDown(self):
+        """Limpia después de cada prueba."""
+        self.conn.close()
 
 if __name__ == '__main__':
     unittest.main()
