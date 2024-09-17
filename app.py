@@ -2,17 +2,30 @@ from flask import Flask, jsonify, request
 import mysql.connector
 from flask_cors import CORS
 import requests
+import os
+import sqlite3
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://ec2-3-218-165-24.compute-1.amazonaws.com:3000"}})  # Allow all origins for testing
 # Database connection setup
-def get_db_connection():
-    return mysql.connector.connect(
-        host='ec2-100-28-15-106.compute-1.amazonaws.com',  # Replace with your MySQL server's private IP
-        user='camilin',            # Replace with your MySQL username
-        password='1234',    # Replace with your MySQL password
-        database='mysql_parcial'      # Replace with your database name
+def get_db_connection(test_db=False):
+    if test_db:
+        print("Using SQLite for testing")
+        conn = sqlite3.connect(':memory:')  # SQLite in-memory database for testing
+        conn.row_factory = sqlite3.Row
+        return conn
+    else:
+        print("Using MySQL for production")
+        return mysql.connector.connect(
+            host='ec2-100-28-15-106.compute-1.amazonaws.com',  # Replace with your MySQL server's private IP
+            user='camilin',            # Replace with your MySQL username
+            password='1234',    # Replace with your MySQL password
+            database='mysql_parcial'      # Replace with your database name
     )
+
+def get_table_name():
+    return 'user' if os.getenv('FLASK_ENV') != 'testing' else 'user_test'
+
 
 @app.route('/')
 def hello_world():
