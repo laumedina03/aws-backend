@@ -26,7 +26,7 @@ def get_db_connection():
 def create_table_if_not_exists(conn):
     cursor = conn.cursor()
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS table1 (
+        CREATE TABLE IF NOT EXISTS user (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             first_name TEXT,
             last_name TEXT,
