@@ -44,7 +44,7 @@ def get_data():
     conn.close()
     return jsonify(rows)
 
-@app.route('/add-user',methods=['POST'])
+"""@app.route('/add-user',methods=['POST'])
 def add_user():
     data = request.get_json()
     first_name = data.get('first_name')
@@ -62,7 +62,34 @@ def add_user():
     cursor.close()
     conn.close()
 
+    return jsonify({'message': 'User added successfully!'}), 201"""
+
+@app.route('/add-user', methods=['POST'])
+def add_user():
+    data = request.get_json()
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    birth_date = data.get('birth_date')
+    password = data.get('password')
+
+    table_name = get_table_name()  # Obtén el nombre de la tabla según el entorno
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Usa format para construir la consulta con el nombre de la tabla
+    query = f'''
+        INSERT INTO {table_name} (first_name, last_name, birth_date, password)
+        VALUES (%s, %s, %s, %s)
+    '''
+    
+    cursor.execute(query, (first_name, last_name, birth_date, password))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
     return jsonify({'message': 'User added successfully!'}), 201
+
 
 # Function to test POST request for adding user
 """def test_add_user():
