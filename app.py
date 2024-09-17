@@ -24,7 +24,10 @@ def get_db_connection(test_db=False):
     )
 
 def get_table_name():
-    return 'user' if os.getenv('FLASK_ENV') != 'testing' else 'user_test'
+    """Devuelve el nombre de la tabla a usar, según el entorno."""
+    if os.getenv('FLASK_ENV') == 'testing':
+        return 'user_test'
+    return 'user'
 
 
 @app.route('/')
@@ -52,7 +55,7 @@ def add_user():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO user (first_name, last_name, birth_date, password)
+        INSERT INTO {table_name} (first_name, last_name, birth_date, password)
         VALUES (%s, %s, %s, %s)
     ''', (first_name, last_name, birth_date, password))
     conn.commit()
