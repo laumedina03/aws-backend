@@ -30,7 +30,7 @@ def create_table_if_not_exists(conn):
             last_name TEXT,
             birth_date TEXT,
             password TEXT
-            
+        )  
     ''')
     conn.commit()
     cursor.close()
@@ -63,9 +63,9 @@ def add_user():
 
     # Usar diferentes marcadores de posición para SQLite y MySQL
     if os.getenv('FLASK_ENV') == 'testing':
-        query = 'INSERT INTO user (first_name, last_name, birth_date, password) VALUES (?, ?, ?,?)'
+        query = 'INSERT INTO user (first_name, last_name, birth_date, password) VALUES (?, ?, ?, ?)'
     else:
-        query = 'INSERT INTO user (first_name, last_name, birth_date, password) VALUES (%s, %s, %s,%s)'
+        query = 'INSERT INTO user (first_name, last_name, birth_date, password) VALUES (%s, %s, %s, %s)'
 
     try:
         cursor.execute(query, (first_name, last_name, birth_date, password))
