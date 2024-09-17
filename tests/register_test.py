@@ -23,10 +23,10 @@ class RegisterUserTestCase(unittest.TestCase):
 	            last_name TEXT NOT NULL,
 		    birth_date TEXT NOT NULL,
 	            password TEXT NOT NULL
-	         )
-	     ''')
-	     conn.commit()
-	     conn.close()
+	        )
+	    ''')
+	    conn.commit()
+	    conn.close()
 
     def setUp(self):
         """Set up the database connection for each test."""
