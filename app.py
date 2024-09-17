@@ -44,7 +44,7 @@ def hello_world():
 @app.route('/data')
 def get_data():
     conn = get_db_connection()
-    cursor = conn.cursor(dictionary=True)
+    cursor = conn.cursor()
     cursor.execute('SELECT * FROM user')  # Replace with your table name
     rows = cursor.fetchall()
     cursor.close()
