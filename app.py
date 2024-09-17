@@ -85,6 +85,8 @@ def add_user():
     
     cursor.execute(query, (first_name, last_name, birth_date, password))
     conn.commit()
+    # Imprime la cantidad de filas afectadas
+    print(f"Rows affected: {cursor.rowcount}")
     cursor.close()
     conn.close()
 

@@ -26,6 +26,12 @@ class RegisterUserTestCase(unittest.TestCase):
             )
         ''')
         self.conn.commit()
+	# Verifica que la tabla se ha creado
+	cursor.execute("PRAGMA table_info(user_test);")
+	columns = cursor.fetchall()
+	print("Columns in user_test:", columns)  # Debugging line
+	self.conn.commit()
+
 
     def test_register_user(self):
         """Prueba para registrar un usuario."""
