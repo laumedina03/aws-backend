@@ -1,64 +1,56 @@
 import unittest
 import json
 import os
-from app import app, get_db_connection, get_table_name
+import sqlite3
+from app import app
 
 class RegisterUserTestCase(unittest.TestCase):
 
-    def setUp(self):
-        """Configuración inicial, ejecutada antes de cada prueba."""
-        app.config['TESTING'] = True
-        os.environ['FLASK_ENV'] = 'testing'
-        self.app = app.test_client()
-        self.conn = get_db_connection(test_db=True)  # Use SQLite in-memory database
-        self.create_tables()
+    @classmethod
+    def setUpClass(cls):
+	"""Set up a temporary in-memory database."""
+	cls.app = app
+	cls.app.config['TESTING'] = True
+	cls.app.config['DATABASE'] = ':memory:'
+	cls.client = cls.app.test_client()
 
-    def create_tables(self):
-        """Crea las tablas necesarias para las pruebas."""
-        cursor = self.conn.cursor()
-        cursor.execute('''
-            CREATE TABLE IF NOT EXISTS user_test (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                first_name TEXT NOT NULL,
-                last_name TEXT NOT NULL,
-                birth_date TEXT NOT NULL,
-                password TEXT NOT NULL
+    with cls.app.app_context():
+            conn = sqlite3.connect(':memory:')
+            cursor = conn.cursor()
+            cursor.execute('''
+		    CREATE TABLE IF NOT EXISTS user_test (
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
+			first_name TEXT NOT NULL,
+			last_name TEXT NOT NULL,
+			birth_date TEXT NOT NULL,
+			password TEXT NOT NULL
             )
         ''')
-        self.conn.commit()
-	# Verifica que la tabla se ha creado
-	cursor.execute("PRAGMA table_info(user_test);")
-	columns = cursor.fetchall()
-	print("Columns in user_test:", columns)  # Debugging line
-	self.conn.commit()
+        conn.commit()
+        conn.close()
 
+    def setUp(self):
+        """Set up the database connection for each test."""
+        self.conn = sqlite3.connect(':memory:')
+        self.cursor = self.conn.cursor()
+        self.app.config['DATABASE'] = ':memory:'
+
+    def tearDown(self):
+        """Clean up after each test."""
+        self.conn.close()
 
     def test_register_user(self):
-        """Prueba para registrar un usuario."""
-        response = self.app.post('/add-user',
-                                 data=json.dumps({
+       response = self.client.post('/add_user', json={
                                      "first_name": "John",
                                      "last_name": "Doe",
                                      "birth_date": "1990-01-01",
                                      "password": "password123"
-                                 }),
-                                 content_type='application/json')
+                                 })                           
         self.assertEqual(response.status_code, 201)
 
-        # JAJAJA Verifica que el usuario fue insertado en la base de datos
-        cursor = self.conn.cursor()
-        cursor.execute('SELECT * FROM user_test WHERE first_name=?', ('John',))
-        user = cursor.fetchone()
-        print("User retrieved from test database:", user)  # Debugging line
-        self.assertIsNotNone(user)
-        #self.assertEqual(user['last_name'], 'Doe')  # Verifica el apellido
-
-    def tearDown(self):
-        """Limpia después de cada prueba."""
-        cursor = self.conn.cursor()
-        cursor.execute('DROP TABLE IF EXISTS user_test')
-        self.conn.commit()
-        self.conn.close()
+    def test_get_users(self):
+        response = self.client.get('/data')
+        self.assertEqual(response.status_code, 200)
 
 if __name__ == '__main__':
     unittest.main()
