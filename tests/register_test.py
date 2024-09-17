@@ -1,5 +1,4 @@
 import unittest
-import json
 import os
 import sqlite3
 from app import app
@@ -18,7 +17,7 @@ class RegisterUserTestCase(unittest.TestCase):
 	    conn = sqlite3.connect(':memory:')
 	    cursor = conn.cursor()
             cursor.execute('''
-		CREATE TABLE IF NOT EXISTS user_test (
+		CREATE TABLE IF NOT EXISTS user (
 		    id INTEGER PRIMARY KEY AUTOINCREMENT,
 		    first_name TEXT NOT NULL,
 	            last_name TEXT NOT NULL,
