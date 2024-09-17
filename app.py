@@ -3,7 +3,7 @@ import mysql.connector
 from flask_cors import CORS
 import requests
 
-app = Flask(_name_)
+app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://ec2-3-218-165-24.compute-1.amazonaws.com:3000"}})  # Allow all origins for testing
 # Database connection setup
 def get_db_connection():
@@ -98,5 +98,5 @@ def add_user():
 
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
     app.run(port=5000, host='0.0.0.0', debug=True)
