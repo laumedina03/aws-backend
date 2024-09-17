@@ -26,7 +26,7 @@ def get_db_connection(test_db=False):
 def get_table_name():
     """Devuelve el nombre de la tabla a usar, según el entorno."""
     if os.getenv('FLASK_ENV') == 'testing':
-        return 'user_test'
+        return 'user2'
     return 'user'
 
 
